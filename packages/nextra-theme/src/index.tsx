@@ -8,8 +8,7 @@ import { ReactElement, useCallback, useMemo } from 'react'
 import { useSet } from 'react-use'
 import { ThemeUICSSObject } from 'theme-ui'
 
-import { Divider, DividerProps, Flex, Icon, Spacing, useI18n } from '@edgeandnode/gds'
-import { NPSForm } from '@edgeandnode/go'
+import { Divider, DividerProps, Flex, Spacing, useI18n } from '@edgeandnode/gds'
 
 import {
   Callout,
@@ -65,7 +64,7 @@ const mdxStyles: ThemeUICSSObject = {
 
 export { Heading, Image, LinkInline, Paragraph }
 
-export default function NextraLayout({ children, pageOpts, pageProps }: NextraThemeLayoutProps): ReactElement {
+export default function NextraLayout({ children, pageOpts }: NextraThemeLayoutProps): ReactElement {
   const { frontMatter, filePath, pageMap, headings, title } = pageOpts
   const { locale, defaultLocale } = useI18n<any>()
   const fsPath = useFSRoute()
@@ -73,8 +72,6 @@ export default function NextraLayout({ children, pageOpts, pageProps }: NextraTh
   const args = useMemo(() => {
     const result = normalizePages({
       list: pageMap,
-      locale,
-      defaultLocale: defaultLocale,
       route: fsPath,
     })
 
@@ -98,7 +95,7 @@ export default function NextraLayout({ children, pageOpts, pageProps }: NextraTh
         (item) => item.type !== 'separator' && item.type !== 'heading' && item.route !== '',
       ),
     }
-  }, [defaultLocale, fsPath, locale, pageMap])
+  }, [fsPath, pageMap])
 
   // Provide `markOutlineItem` to the `DocumentContext` so child `Heading` components can mark outline items as "in or above view" or not
   const [
@@ -140,6 +137,7 @@ export default function NextraLayout({ children, pageOpts, pageProps }: NextraTh
   }
 
   return (
+    // @ts-expect-error TODO: pageProps
     <NavContext.Provider value={{ filePath: pageProps.remoteFilePath || filePath, ...args }}>
       <DocumentContext.Provider value={{ frontMatter, headings, markOutlineItem, highlightedOutlineItemId }}>
         <NextSeo {...seo} />

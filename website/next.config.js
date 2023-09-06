@@ -15,24 +15,9 @@ const env = {
 const withNextra = nextra({
   theme: '@graphprotocol/nextra-theme',
   staticImage: true,
-  flexsearch: false,
+  search: false,
   codeHighlight: false,
   defaultShowCopyCode: false,
-  transform(result, { route }) {
-    if (route && !result.includes('getStaticProps')) {
-      const banner = `
-import { getPageMap } from '@/src/getPageMap'
-
-export const getStaticProps = async context => ({
-  props: {
-    __nextra_pageMap: await getPageMap('${route.split('/')[1]}')
-  }
-})`
-      result += banner
-    }
-
-    return result
-  },
 })
 
 export default withNextra({
