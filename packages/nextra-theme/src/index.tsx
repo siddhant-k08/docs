@@ -8,7 +8,7 @@ import { ReactElement, useCallback, useMemo } from 'react'
 import { useSet } from 'react-use'
 import { ThemeUICSSObject } from 'theme-ui'
 
-import { Divider, DividerProps, Flex, Spacing, useI18n } from '@edgeandnode/gds'
+import { Divider, DividerProps, Flex, Spacing } from '@edgeandnode/gds'
 
 import {
   Callout,
@@ -64,9 +64,9 @@ const mdxStyles: ThemeUICSSObject = {
 
 export { Heading, Image, LinkInline, Paragraph }
 
-export default function NextraLayout({ children, pageOpts }: NextraThemeLayoutProps): ReactElement {
+// @ts-expect-error TODO: pageProps
+export default function NextraLayout({ children, pageOpts, pageProps = {} }: NextraThemeLayoutProps): ReactElement {
   const { frontMatter, filePath, pageMap, headings, title } = pageOpts
-  const { locale, defaultLocale } = useI18n<any>()
   const fsPath = useFSRoute()
 
   const args = useMemo(() => {
@@ -137,7 +137,6 @@ export default function NextraLayout({ children, pageOpts }: NextraThemeLayoutPr
   }
 
   return (
-    // @ts-expect-error TODO: pageProps
     <NavContext.Provider value={{ filePath: pageProps.remoteFilePath || filePath, ...args }}>
       <DocumentContext.Provider value={{ frontMatter, headings, markOutlineItem, highlightedOutlineItemId }}>
         <NextSeo {...seo} />
